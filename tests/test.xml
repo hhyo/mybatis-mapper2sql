@@ -13,6 +13,17 @@
         <include refid="${include_target}"/>
         <include refid="somewhere"/>
     </sql>
+    <select id="testBasic">
+        SELECT
+        name,
+        category,
+        price
+        FROM
+        fruits
+        WHERE
+        category = 'apple' AND
+        <![CDATA[ price < 500 ]]>
+    </select>
     <select id="testParameters">
         SELECT
         name,

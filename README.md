@@ -1,10 +1,12 @@
 mybatis-mapper2sql
-==========================
+==================
+[![Build Status](https://travis-ci.org/hhyo/mybatis-mapper2sql.svg?branch=master)](https://travis-ci.org/hhyo/mybatis-mapper2sql)
+[![codecov](https://codecov.io/gh/hhyo/mybatis-mapper2sql/branch/master/graph/badge.svg)](https://codecov.io/gh/hhyo/mybatis-mapper2sql)
 [![image](https://img.shields.io/pypi/v/mybatis-mapper2sql.svg)](https://pypi.org/project/mybatis-mapper2sql/)
 [![image](https://img.shields.io/pypi/l/mybatis-mapper2sql.svg)](https://github.com/hhyo/mybatis-mapper2sql/blob/master/LICENSE)
 [![image](https://img.shields.io/pypi/pyversions/mybatis-mapper2sql.svg)](https://pypi.org/project/mybatis-mapper2sql/)
 
-Generate SQL Statements from the MyBatis3 Mapper XML file  in Python  
+Generate SQL Statements from the MyBatis3 Mapper XML file
 **Just for SQL Review https://github.com/hhyo/archery/issues/3**
 
 Installation
@@ -250,7 +252,7 @@ WHERE category = 'apple'
 
 UPDATE fruits
 SET category = ?,
-    price = ?,
+    price = ?
 WHERE name = ?;
 
 

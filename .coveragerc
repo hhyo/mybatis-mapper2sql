@@ -1,0 +1,2 @@
+[run]
+include = *mybatis_mapper2sql*
