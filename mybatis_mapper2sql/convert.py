@@ -146,8 +146,8 @@ def convert_trim_where_set(mybatis_mapper, child):
         convert_string = re.sub(regex, '', convert_string, count=1, flags=re.I)
     # Remove suffixOverrides
     if suffix_overrides:
-        regex = suffix_overrides + '$'
-        convert_string = re.sub(regex, '', convert_string, count=1, flags=re.I)
+        regex = suffix_overrides + '(\s+--.+)?$'
+        convert_string = re.sub(regex, r'\1', convert_string, count=1, flags=re.I)
     # Add Prefix if String is not empty
     if re.search('\S', convert_string):
         convert_string = prefix + ' ' + convert_string
