@@ -6,7 +6,7 @@ mybatis-mapper2sql
 [![image](https://img.shields.io/pypi/l/mybatis-mapper2sql.svg)](https://github.com/hhyo/mybatis-mapper2sql/blob/master/LICENSE)
 [![image](https://img.shields.io/pypi/pyversions/mybatis-mapper2sql.svg)](https://pypi.org/project/mybatis-mapper2sql/)
 
-Generate SQL Statements from the MyBatis3 Mapper XML file
+Generate SQL Statements from the MyBatis3 Mapper XML file   
 **Just for SQL Review https://github.com/hhyo/archery/issues/3**
 
 Installation
@@ -325,3 +325,4 @@ Acknowledgments
 This project was inspired by the following projects and websites:
 - https://github.com/OldBlackJoe/mybatis-mapper 
 - http://www.mybatis.org/mybatis-3/dynamic-sql.html
+- http://www.enmoedu.com/article-205.html
