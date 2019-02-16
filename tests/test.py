@@ -18,6 +18,18 @@ class Mapper2SqlTest(unittest.TestCase):
         statement = mybatis_mapper2sql.get_statement(self.mapper, result_type='raw', strip_comments=True)
         print(statement)
 
+    def test_all_result(self):
+        statement = mybatis_mapper2sql.get_statement(self.mapper, result_type='list', strip_comments=True)
+        print(statement)
+
+    def test_all_wrong_result(self):
+        try:
+            mybatis_mapper2sql.get_statement(self.mapper, result_type='sql', strip_comments=True)
+        except RuntimeError as e:
+            self.assertEqual(str(e), 'Invalid value for sql_type: raw|list')
+        else:
+            self.fail('IOError not raised')
+
     def test_base(self):
         self.child_id = 'testBasic'
         print("============{}============".format(self.child_id))

@@ -32,8 +32,10 @@
         FROM
         fruits
         WHERE
-        category = #{category}
-        AND price > ${price}
+        category = #{category,jdbcType=VARCHAR}
+        AND price > ${price,jdbcType=BIGINT}
+        AND type = ${price,jdbcType=BOOLEAN}
+        AND content = ${price,jdbcType=BLOB}
     </select>
     <select id="testInclude">
         SELECT

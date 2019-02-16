@@ -29,7 +29,7 @@ def get_statement(mybatis_mapper, result_type='raw', **kwargs):
     Get SQL Statements from Mapper
     :param mybatis_mapper:
     :param kwargs: sqlparse format kwargs
-    :param result_type: sql|list
+    :param result_type: raw|list
     :return:
     """
     # format kwargs
