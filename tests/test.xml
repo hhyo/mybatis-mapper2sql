@@ -174,4 +174,29 @@
         WHERE
         name like #{likeName}
     </select>
+    <insert id="testInsertSelective">
+        insert into fruits
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null">
+                name,
+            </if>
+            <if test="category != null">
+                category,
+            </if>
+            <if test="price != null">
+                price,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null">
+                #{name},
+            </if>
+            <if test="category != null">
+                #{category},
+            </if>
+            <if test="price != null">
+                #{price},
+            </if>
+        </trim>
+    </insert>
 </mapper>
