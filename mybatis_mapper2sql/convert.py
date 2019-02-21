@@ -121,14 +121,17 @@ def convert_choose_when_otherwise(mybatis_mapper, child):
 def convert_trim_where_set(mybatis_mapper, child):
     if child.tag == 'trim':
         prefix = child.attrib.get('prefix')
+        suffix = child.attrib.get('suffix')
         prefix_overrides = child.attrib.get('prefixOverrides')
-        suffix_overrides = child.attrib.get('suffix_overrides')
+        suffix_overrides = child.attrib.get('suffixOverrides')
     elif child.tag == 'set':
         prefix = 'SET'
+        suffix = None
         prefix_overrides = None
         suffix_overrides = ','
     elif child.tag == 'where':
         prefix = 'WHERE'
+        suffix = None
         prefix_overrides = 'and|or'
         suffix_overrides = None
     else:
@@ -151,6 +154,8 @@ def convert_trim_where_set(mybatis_mapper, child):
     # Add Prefix if String is not empty
     if re.search('\S', convert_string):
         convert_string = prefix + ' ' + convert_string
+        if suffix:
+            convert_string = convert_string + ' ' + suffix
     # Add trim/where/set tail
     convert_string += convert_parameters(child, tail=True)
     return convert_string
