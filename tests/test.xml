@@ -78,6 +78,22 @@
             OR price = 200
         </trim>
     </select>
+    <select id="testTrim">
+        SELECT
+        name,
+        category,
+        price
+        FROM
+        fruits
+        <trim prefix="WHERE" prefixOverrides="AND|OR">
+            OR category = 'apple'
+            OR price = 200
+        </trim>
+        AND
+        <trim prefixOverrides="AND|OR">
+            (type = 40 OR type= 60) and yn = 1
+        </trim>
+    </select>
     <select id="testWhere">
         SELECT
         name,

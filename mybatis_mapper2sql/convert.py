@@ -145,15 +145,16 @@ def convert_trim_where_set(mybatis_mapper, child):
         convert_string += convert_children(mybatis_mapper, next_child)
     # Remove prefixOverrides
     if prefix_overrides:
-        regex = '^[\s]*?' + prefix_overrides
+        regex = fr'^[\s]*?({prefix_overrides})'
         convert_string = re.sub(regex, '', convert_string, count=1, flags=re.I)
     # Remove suffixOverrides
     if suffix_overrides:
-        regex = suffix_overrides + '(\s+--.+)?$'
-        convert_string = re.sub(regex, r'\1', convert_string, count=1, flags=re.I)
+        regex = fr'{suffix_overrides}(\s+--.+)?$'
+        convert_string = re.sub(regex, r'', convert_string, count=1, flags=re.I)
     # Add Prefix if String is not empty
-    if re.search('\S', convert_string):
-        convert_string = prefix + ' ' + convert_string
+    if re.search(r'\S', convert_string):
+        if prefix:
+            convert_string = prefix + ' ' + convert_string
         if suffix:
             convert_string = convert_string + ' ' + suffix
     # Add trim/where/set tail
