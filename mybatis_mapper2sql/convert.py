@@ -168,7 +168,7 @@ def convert_foreach(mybatis_mapper, child):
     index = child.attrib.get('index')
     open = child.attrib.get('open', '')
     close = child.attrib.get('close', '')
-    separator = child.attrib.get('separator')
+    separator = child.attrib.get('separator', '')
     convert_string = ''
     # Add foreach text
     convert_string += convert_parameters(child, text=True)
