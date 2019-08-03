@@ -36,7 +36,7 @@ setup(
     packages=['mybatis_mapper2sql'],
     include_package_data=True,
     install_requires=[
-        'sqlparse==0.2.4'
+        'sqlparse>=0.2.4'
     ],
     license='Apache 2.0',
     zip_safe=False,
