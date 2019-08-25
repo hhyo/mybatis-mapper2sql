@@ -90,6 +90,13 @@ class Mapper2SqlTest(unittest.TestCase):
         self.statement = mybatis_mapper2sql.get_child_statement(self.mapper, child_id=self.child_id, reindent=True)
         print(self.statement)
 
+    def test_choose_native(self):
+        self.child_id = 'testChooseNative'
+        print("============{}============".format(self.child_id))
+        self.statement = mybatis_mapper2sql.get_child_statement(self.mapper, child_id=self.child_id,
+                                                                reindent=True, native=True)
+        print(self.statement)
+
 
 if __name__ == '__main__':
     unittest.main()

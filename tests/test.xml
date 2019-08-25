@@ -215,4 +215,28 @@
             </if>
         </trim>
     </insert>
+    <select id="testChooseNative">
+        SELECT
+        name,
+        category,
+        price
+        FROM
+        fruits
+        <where>
+            <choose>
+                <when test="name != null">
+                    AND name = #{name}
+                </when>
+                <when test="category == 'banana'">
+                    AND category = #{category}
+                    <if test="price != null and price !=''">
+                        AND price = ${price}
+                    </if>
+                </when>
+                <otherwise>
+                    AND category = 'apple'
+                </otherwise>
+            </choose>
+        </where>
+    </select>
 </mapper>

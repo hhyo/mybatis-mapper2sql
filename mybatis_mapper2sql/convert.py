@@ -10,23 +10,23 @@ def convert_children(mybatis_mapper, child, **kwargs):
     Get children info
     :param mybatis_mapper:
     :param child:
-    :param kwargs:
+    :param kwargs: native: parse follow the native rules
     :return:
     """
     if child.tag in query_types:
         return convert_parameters(child, text=True, tail=True)
     elif child.tag == 'include':
-        return convert_include(mybatis_mapper, child, properties=kwargs.get('properties'))
+        return convert_include(mybatis_mapper, child, **kwargs)
     elif child.tag == 'if':
-        return convert_if(mybatis_mapper, child)
+        return convert_if(mybatis_mapper, child, **kwargs)
     elif child.tag in ('choose', 'when', 'otherwise'):
-        return convert_choose_when_otherwise(mybatis_mapper, child)
+        return convert_choose_when_otherwise(mybatis_mapper, child, **kwargs)
     elif child.tag in ('trim', 'where', 'set'):
-        return convert_trim_where_set(mybatis_mapper, child)
+        return convert_trim_where_set(mybatis_mapper, child, **kwargs)
     elif child.tag == 'foreach':
-        return convert_foreach(mybatis_mapper, child)
+        return convert_foreach(mybatis_mapper, child, **kwargs)
     elif child.tag == 'bind':
-        return convert_bind(child)
+        return convert_bind(child, **kwargs)
     else:
         return ''
 
@@ -39,7 +39,7 @@ def convert_parameters(child, text=False, tail=False):
     :param tail:
     :return:
     """
-    p = re.compile('\S')
+    p = re.compile(r'\S')
     # Remove empty info
     child_text = child.text if child.text else ''
     child_tail = child.tail if child.tail else ''
@@ -66,9 +66,9 @@ def convert_parameters(child, text=False, tail=False):
     return convert_string
 
 
-def convert_include(mybatis_mapper, child, properties=None):
+def convert_include(mybatis_mapper, child, **kwargs):
     # Add Properties
-    properties = properties if properties else dict()
+    properties = kwargs.get('properties') if kwargs.get('properties') else dict()
     for next_child in child:
         if next_child.tag == 'property':
             properties[next_child.attrib.get('name')] = next_child.attrib.get('value')
@@ -85,40 +85,49 @@ def convert_include(mybatis_mapper, child, properties=None):
     # add include text
     convert_string += convert_parameters(child, text=True)
     for next_child in include_child:
-        convert_string += convert_children(mybatis_mapper, next_child, properties=properties)
+        kwargs['properties'] = properties
+        convert_string += convert_children(mybatis_mapper, next_child, **kwargs)
     # add include tail
     convert_string += convert_parameters(child, tail=True)
     return convert_string
 
 
-def convert_if(mybatis_mapper, child):
+def convert_if(mybatis_mapper, child, **kwargs):
     convert_string = ''
     test = child.attrib.get('test')
     # Add if text
     convert_string += convert_parameters(child, text=True)
     for next_child in child:
-        convert_string += convert_children(mybatis_mapper, next_child)
+        convert_string += convert_children(mybatis_mapper, next_child, **kwargs)
     convert_string += '-- if(' + test + ')\n'
     # Add if tail
     convert_string += convert_parameters(child, tail=True)
     return convert_string
 
 
-def convert_choose_when_otherwise(mybatis_mapper, child):
+def convert_choose_when_otherwise(mybatis_mapper, child, **kwargs):
+    # native
+    native = kwargs.get('native')
+    when_element_cnt = kwargs.get('when_element_cnt', 0)
     convert_string = ''
     for next_child in child:
         if next_child.tag == 'when':
-            test = next_child.attrib.get('test')
-            convert_string += convert_parameters(next_child, text=True, tail=True)
-            convert_string += '-- if(' + test + ')'
+            if native and when_element_cnt >= 1:
+                break
+            else:
+                test = next_child.attrib.get('test')
+                convert_string += convert_parameters(next_child, text=True, tail=True)
+                convert_string += '-- if(' + test + ')'
+                when_element_cnt += 1
+                kwargs['when_element_cnt'] = when_element_cnt
         elif next_child.tag == 'otherwise':
             convert_string += convert_parameters(next_child, text=True, tail=True)
             convert_string += '-- otherwise'
-        convert_string += convert_children(mybatis_mapper, next_child)
+        convert_string += convert_children(mybatis_mapper, next_child, **kwargs)
     return convert_string
 
 
-def convert_trim_where_set(mybatis_mapper, child):
+def convert_trim_where_set(mybatis_mapper, child, **kwargs):
     if child.tag == 'trim':
         prefix = child.attrib.get('prefix')
         suffix = child.attrib.get('suffix')
@@ -142,7 +151,7 @@ def convert_trim_where_set(mybatis_mapper, child):
     convert_string += convert_parameters(child, text=True)
     # Convert children first
     for next_child in child:
-        convert_string += convert_children(mybatis_mapper, next_child)
+        convert_string += convert_children(mybatis_mapper, next_child, **kwargs)
     # Remove prefixOverrides
     if prefix_overrides:
         regex = r'^[\s]*?({})'.format(prefix_overrides)
@@ -162,7 +171,7 @@ def convert_trim_where_set(mybatis_mapper, child):
     return convert_string
 
 
-def convert_foreach(mybatis_mapper, child):
+def convert_foreach(mybatis_mapper, child, **kwargs):
     collection = child.attrib.get('collection')
     item = child.attrib.get('item')
     index = child.attrib.get('index')
@@ -173,7 +182,7 @@ def convert_foreach(mybatis_mapper, child):
     # Add foreach text
     convert_string += convert_parameters(child, text=True)
     for next_child in child:
-        convert_string += convert_children(mybatis_mapper, next_child)
+        convert_string += convert_children(mybatis_mapper, next_child, **kwargs)
     # Add two items
     convert_string = open + convert_string + separator + convert_string + close
     # Add foreach tail
@@ -181,7 +190,7 @@ def convert_foreach(mybatis_mapper, child):
     return convert_string
 
 
-def convert_bind(child):
+def convert_bind(child, **kwargs):
     """
     :param child:
     :return:

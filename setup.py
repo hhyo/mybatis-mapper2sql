@@ -25,7 +25,7 @@ class Test(test):
 
 setup(
     name='mybatis-mapper2sql',
-    version='0.1.8',
+    version='0.1.9',
     author='hhyo',
     author_email='rtttte@qq.com',
     url='http://github.com/hhyo/mybatis-mapper2sql',

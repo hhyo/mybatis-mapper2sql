@@ -28,7 +28,7 @@ def get_statement(mybatis_mapper, result_type='raw', **kwargs):
     """
     Get SQL Statements from Mapper
     :param mybatis_mapper:
-    :param kwargs: sqlparse format kwargs
+    :param kwargs: sqlparse format kwargs /native: parse follow the native rules
     :param result_type: raw|list
     :return:
     """
@@ -64,10 +64,10 @@ def get_child_statement(mybatis_mapper, child_id, **kwargs):
     # get sql
     statement = ''
     child = mybatis_mapper.get(child_id)
-    statement += convert_children(mybatis_mapper, child)
+    statement += convert_children(mybatis_mapper, child, **kwargs)
     # The child element has children
     for next_child in child:
-        statement += convert_children(mybatis_mapper, next_child)
+        statement += convert_children(mybatis_mapper, next_child, **kwargs)
     return sqlparse.format(statement, **kwargs)
 
 
