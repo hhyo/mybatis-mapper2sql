@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<expected>
+<testChoose>
+SELECT name,
+       category,
+       price
+FROM fruits
+WHERE name = ? -- if(name != null)
+
+  AND category = ? -- if(category == 'banana')
+
+  AND price = ? -- if(price != null and price !='')
+
+  AND category = 'apple' -- otherwise
+
+  AND category IS NOT NULL</testChoose>
+<testChooseNative>
+SELECT name,
+       category,
+       price
+FROM fruits
+WHERE name = ? -- if(name != null)
+
+  AND category IS NOT NULL</testChooseNative>
+</expected>

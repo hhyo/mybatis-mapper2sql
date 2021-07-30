@@ -109,7 +109,11 @@ def convert_choose_when_otherwise(mybatis_mapper, child, **kwargs):
     # native
     native = kwargs.get('native')
     when_element_cnt = kwargs.get('when_element_cnt', 0)
+
     convert_string = ''
+    if child.tag == 'choose':
+        convert_string += convert_parameters(child, text=True)
+
     for next_child in child:
         if next_child.tag == 'when':
             if native and when_element_cnt >= 1:
@@ -124,6 +128,10 @@ def convert_choose_when_otherwise(mybatis_mapper, child, **kwargs):
             convert_string += convert_parameters(next_child, text=True, tail=True)
             convert_string += '-- otherwise'
         convert_string += convert_children(mybatis_mapper, next_child, **kwargs)
+
+    if child.tag == 'choose':
+        convert_string += convert_parameters(child, tail=True)
+
     return convert_string
 
 
