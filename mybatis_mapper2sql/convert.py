@@ -81,7 +81,7 @@ def convert_include(mybatis_mapper, child, **kwargs):
             include_child_id = properties.get(include_child_id)
             break
     include_child = mybatis_mapper.get(include_child_id)
-    convert_string += convert_children(mybatis_mapper, include_child)
+    convert_string += convert_children(mybatis_mapper, include_child, **kwargs)
     # add include text
     convert_string += convert_parameters(child, text=True)
     for next_child in include_child:
