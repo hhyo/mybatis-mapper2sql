@@ -1,9 +1,12 @@
 import os
 import unittest
 import mybatis_mapper2sql
+import xml.etree.ElementTree as ET
+
 
 base_dir = os.path.abspath(os.path.dirname(__file__))
 xml = os.path.join(base_dir, 'test.xml')
+expected_xml = os.path.join(base_dir, 'expected.xml')
 
 
 class Mapper2SqlTest(unittest.TestCase):
@@ -13,6 +16,10 @@ class Mapper2SqlTest(unittest.TestCase):
         cls.mapper, cls.xml_raw_text = mybatis_mapper2sql.create_mapper(xml=xml)
         print("============XML_RAW_TEXT============")
         print(cls.xml_raw_text)
+
+        with open(expected_xml, "r") as f:
+            xml_raw_text = f.read()
+            cls.expected_results = ET.fromstring(xml_raw_text)
 
     def test_all(self):
         statement = mybatis_mapper2sql.get_statement(self.mapper, result_type='raw', strip_comments=True)
@@ -77,6 +84,7 @@ class Mapper2SqlTest(unittest.TestCase):
         print("============{}============".format(self.child_id))
         self.statement = mybatis_mapper2sql.get_child_statement(self.mapper, child_id=self.child_id, reindent=True)
         print(self.statement)
+        self.assertEqual(self.expected_results.find(self.child_id).text, self.statement)
 
     def test_foreach(self):
         self.child_id = 'testForeach'
@@ -96,6 +104,7 @@ class Mapper2SqlTest(unittest.TestCase):
         self.statement = mybatis_mapper2sql.get_child_statement(self.mapper, child_id=self.child_id,
                                                                 reindent=True, native=True)
         print(self.statement)
+        self.assertEqual(self.expected_results.find(self.child_id).text, self.statement)
 
 
 if __name__ == '__main__':

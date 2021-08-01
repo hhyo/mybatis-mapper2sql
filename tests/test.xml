@@ -46,6 +46,7 @@
             <property name="prefix" value="Some"/>
             <property name="include_target" value="sometable"/>
         </include>
+        ORDER BY name
     </select>
     <select id="testIf">
         SELECT
@@ -107,6 +108,7 @@
                 AND price = ${price}
             </if>
         </where>
+        ORDER BY name
     </select>
     <update id="testSet">
         UPDATE
@@ -144,6 +146,7 @@
                     AND category = 'apple'
                 </otherwise>
             </choose>
+            AND category IS NOT NULL
         </where>
     </select>
     <select id="testForeach">
@@ -237,6 +240,7 @@
                     AND category = 'apple'
                 </otherwise>
             </choose>
+            AND category IS NOT NULL
         </where>
     </select>
 </mapper>
